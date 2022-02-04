@@ -1,9 +1,9 @@
 maubot: 0.1.0
-id: xyz.maubot.reactbot
+id: xyz.maubot.redactbot
 version: 2.2.0
 license: AGPL-3.0-or-later
 modules:
-- reactbot
-main_class: ReactBot
+- redactbot
+main_class: RedactBot
 extra_files:
 - base-config.yaml

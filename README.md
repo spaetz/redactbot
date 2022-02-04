@@ -1,16 +1,10 @@
-# reactbot
-A [maubot](https://github.com/maubot/maubot) that responds to messages that match predefined rules.
+# redactbot
+A [maubot](https://github.com/maubot/maubot) that responds to bad content and redacts/warns
 
 ## Samples
 * The [base config](base-config.yaml) contains a cookie reaction for TWIM submissions
   in [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org)
   and an image response for "alot".
-* [samples/jesari.yaml](samples/jesari.yaml) contains a replacement for [jesaribot](https://github.com/maubot/jesaribot).
-* [samples/stallman.yaml](samples/stallman.yaml) contains a Stallman interject bot.
-* [samples/random-reaction.yaml](samples/random-reaction.yaml) has an example of
-  a randomized reaction to matching messages.
-* [samples/nitter.yaml](samples/nitter.yaml) has an example of matching tweet links
-  and responding with a corresponding nitter.net link.
 
 ## Config format
 ### Templates
