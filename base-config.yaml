@@ -1,7 +1,8 @@
 # list of rooms that redactbot should be supervising
 rooms:
-  - !ThIzZNArdoSkaWndMq:matrix.org
+- '!ThIzZNArdoSkaWndMq:matrix.org'
 
 # list of permitted mime-types
 permitted_mime:
-  - text/x-log
+- text/x-log
+- text/plain

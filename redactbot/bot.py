@@ -60,13 +60,9 @@ class RedactBot(Plugin):
 
     def on_external_config_update(self) -> None:
         self.config.load_and_update()
-        try:
-            self.config.parse_data()
-        except ConfigError:
-            self.log.exception("Failed to load config")
-        for fi in self.user_karma.values():
-            fi.max = self.config["antispam.user.max"]
-            fi.delay = self.config["antispam.user.delay"]
+        #for fi in self.user_karma.values():
+            #fi.max = self.config["karma.user.max"]
+            #fi.delay = self.config["karma.user.delay"]
 
     def _make_karma_info(self, for_type: str) -> 'KarmaInfo':
         return KarmaInfo(max=self.config[f"antispam.{for_type}.max"],
@@ -85,13 +81,19 @@ class RedactBot(Plugin):
 
     @event.on(EventType.ROOM_MESSAGE)
     async def event_handler(self, evt: MessageEvent) -> None:
-        if evt.sender == self.client.mxid or evt.content.msgtype not in self.allowed_msgtypes:
-            # either we sent the msg or it is not in EventType.FILE
+        if evt.room_id not in self.config['rooms'] or \
+           evt.sender == self.client.mxid or \
+           evt.content.msgtype not in self.allowed_msgtypes:
+            # msg from a room we don't supervise, we did not send
+            # ourself or is not in EventType.FILE?
             return
-        self.log.debug(f"File posted in {evt.room_id}")
-        self.log.warning(f"File posted in {evt.room_id}")
-        if 0:
+        self.log.debug(f"File {evt.content.body} ({evt.content.info.mimetype}) posted in room {evt.room_id}")
+        if evt.content.info.mimetype in self.config['permitted_mime']:
+            # Don't do anything for permitted file types.
+            self.log.debug(f"This is a permitted file type: {evt.content.info.mimetype}")
             return
-        else:
-            self.log.warning(f"Redacting filen {evt.content.body}")
-            await self.client.redact(evt.room_id, evt.event_id)
+
+        self.log.warning(f"Redacting file {evt.content.body} in room {evt.room_id}")
+        await self.client.redact(evt.room_id, evt.event_id)
+        await evt.reply(f"I redacted your file {evt.content.body}. No files in here, but: {self.config['permitted_mime']}.")
+        return
