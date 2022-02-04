@@ -1,49 +1,7 @@
-templates:
-  reaction:
-    type: m.reaction
-    variables:
-      react_to_event: "{{event.content.get_reply_to() or event.event_id}}"
-    content:
-      m.relates_to:
-        rel_type: m.annotation
-        event_id: $${react_to_event}
-        key: $${reaction}
-  alot:
-    type: m.room.message
-    content:
-      msgtype: m.image
-      body: image.png
-      url: "mxc://maunium.net/eFnyRdgJOHlKXCxzoKPQbwLV"
-      info:
-        mimetype: image/png
-        w: 680
-        h: 510
-        size: 247492
-        thumbnail_url: "mxc://maunium.net/PMxffxMfcUZeWeeYMDCdghBG"
-        thumbnail_info:
-          w: 680
-          h: 510
-          mimetype: image/png
-          size: 233763
+# list of rooms that redactbot should be supervising
+rooms:
+  - !ThIzZNArdoSkaWndMq:matrix.org
 
-default_flags:
-- ignorecase
-
-antispam:
-  room:
-    max: 1
-    delay: 60
-  user:
-    max: 2
-    delay: 60
-
-rules:
-  twim_cookies:
-    rooms: ["!FPUfgzXYWTKgIrwKxW:matrix.org"]
-    matches: [^TWIM]
-    template: reaction
-    variables:
-      reaction: 🍪
-  alot:
-    matches: [alot]
-    template: alot
+# list of permitted mime-types
+permitted_mime:
+  - text/x-log

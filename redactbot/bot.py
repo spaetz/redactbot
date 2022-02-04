@@ -86,8 +86,10 @@ class RedactBot(Plugin):
     @event.on(EventType.ROOM_MESSAGE)
     async def event_handler(self, evt: MessageEvent) -> None:
         if evt.sender == self.client.mxid or evt.content.msgtype not in self.allowed_msgtypes:
+            # either we sent the msg or it is not in EventType.FILE
             return
-        self.log.debug(f"File posted in {evt.room_id} {evt.content}")
+        self.log.debug(f"File posted in {evt.room_id}")
+        self.log.warning(f"File posted in {evt.room_id}")
         if 0:
             return
         else:
