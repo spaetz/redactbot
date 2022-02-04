@@ -46,7 +46,7 @@ class KarmaInfo:
 
 
 class RedactBot(Plugin):
-    allowed_msgtypes: Tuple[MessageType, ...] = (MessageType.TEXT, MessageType.EMOTE)
+    allowed_msgtypes: Tuple[MessageType, ...] = (MessageType.FILE,)
     user_karma: Dict[UserID, KarmaInfo]
 
     @classmethod
@@ -81,19 +81,15 @@ class RedactBot(Plugin):
             return fi
 
     def is_flood(self, evt: MessageEvent) -> bool:
-        return (self._get_karma_info(self.user_karma, evt.sender, "user").bump()
+        return self._get_karma_info(self.user_karma, evt.sender, "user").bump()
 
     @event.on(EventType.ROOM_MESSAGE)
     async def event_handler(self, evt: MessageEvent) -> None:
         if evt.sender == self.client.mxid or evt.content.msgtype not in self.allowed_msgtypes:
             return
-        for name, rule in self.config.rules.items():
-            match = rule.match(evt)
-            if match is not None:
-                if self.is_flood(evt):
-                    return
-                try:
-                    await rule.execute(evt, match)
-                except Exception:
-                    self.log.exception(f"Failed to execute {name} in {evt.room_id}")
-                return
+        self.log.debug(f"File posted in {evt.room_id} {evt.content}")
+        if 0:
+            return
+        else:
+            self.log.warning(f"Redacting filen {evt.content.body}")
+            await self.client.redact(evt.room_id, evt.event_id)
